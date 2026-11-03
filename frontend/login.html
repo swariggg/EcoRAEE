@@ -12,50 +12,65 @@
 </head>
 <body>
   <main class="login">
-    <section class="escena" aria-label="Presentación">
-      <div class="marca-login"><span id="logo"></span>EcoRAEE</div>
-      <h1>Cada equipo cuenta</h1>
-      <p>Inicie sesión y siga la ruta de cada aparato hasta su nueva vida.</p>
-    </section>
-    <section class="lado-form">
-      <div class="caja">
-        <h2>Ingrese a su cuenta</h2>
-        <form id="form-login" novalidate>
-          <div class="campo">
-            <label for="correo">Correo institucional</label>
-            <div class="control" id="c-correo">
-              <input id="correo" name="correo" type="email" autocomplete="username" required maxlength="150" placeholder="Escriba su correo">
+    <span class="burbuja b1"></span><span class="burbuja b2"></span><span class="burbuja b3"></span><span class="burbuja b4"></span>
+    <div class="tarjeta-login">
+      <svg class="curva" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 0 H56 C48 14 60 30 56 48 C52 66 40 74 46 88 C48 94 52 98 54 100 H0 Z"/>
+      </svg>
+      <section class="escena" aria-label="Presentación">
+        <header class="marcas">
+          <span class="marca-login"><span id="logo"></span>EcoRAEE</span>
+          <span class="divisor" aria-hidden="true"></span>
+          <img class="uide" src="assets/img/uide.png" alt="UIDE, Universidad Internacional del Ecuador" width="110" height="52">
+        </header>
+        <div class="mancha">
+          <span class="punto p1"></span><span class="punto p2"></span><span class="punto p3"></span><span class="punto p4"></span><span class="punto p5"></span>
+          <img src="assets/img/equipos-reciclaje.png" alt="Laptops junto al símbolo de reciclaje" width="573" height="390">
+        </div>
+        <p class="lema"><b>Cada equipo cuenta.</b> Siga la ruta de cada aparato hasta su nueva vida.</p>
+        <footer class="pie-escena">© 2026 EcoRAEE Cloud · Proyecto Integrador UIDE</footer>
+      </section>
+      <section class="lado-form">
+        <div class="caja">
+          <h2>Iniciar sesión</h2>
+          <form id="form-login" novalidate>
+            <div class="campo">
+              <label for="correo">Correo institucional</label>
+              <div class="control" id="c-correo">
+                <input id="correo" name="correo" type="email" autocomplete="username" required maxlength="150" placeholder="Escriba su correo">
+              </div>
+              <span class="msg" aria-live="polite"></span>
             </div>
-            <span class="msg" aria-live="polite"></span>
-          </div>
-          <div class="campo" style="margin-top:16px">
-            <label for="password">Contraseña</label>
-            <div class="control" id="c-pass">
-              <input id="password" name="password" type="password" autocomplete="current-password" required maxlength="100" placeholder="Escriba su contraseña">
-              <button type="button" class="ojo" id="ver" aria-label="Mostrar contraseña"></button>
+            <div class="campo" style="margin-top:16px">
+              <label for="password">Contraseña</label>
+              <div class="control" id="c-pass">
+                <input id="password" name="password" type="password" autocomplete="current-password" required maxlength="100" placeholder="Escriba su contraseña">
+                <button type="button" class="ojo" id="ver" aria-label="Mostrar contraseña"></button>
+              </div>
+              <span class="msg" aria-live="polite"></span>
             </div>
-            <span class="msg" aria-live="polite"></span>
-          </div>
-          <div class="olvido"><button type="button" id="olvido">¿Olvidó su contraseña?</button></div>
-          <div class="aviso error" id="error" hidden style="margin-top:16px"></div>
-          <button class="btn entrar" type="submit" id="entrar">Iniciar sesión</button>
-        </form>
-        <div class="separador">o pruebe un rol</div>
-        <label class="sr-only" for="demo">Usuario de prueba</label>
-        <select class="demo" id="demo">
-          <option value="">Elegir un usuario de prueba…</option>
-          <option value="admin@ecoraee.test">Administrador</option>
-          <option value="gen1@ecoraee.test">Generador (estudiante)</option>
-          <option value="ope1@ecoraee.test">Operador de centro</option>
-          <option value="tec1@ecoraee.test">Técnico evaluador</option>
-          <option value="coo1@ecoraee.test">Coordinador logístico</option>
-          <option value="rea1@ecoraee.test">Reacondicionador (taller)</option>
-          <option value="rec1@ecoraee.test">Gestor de reciclaje</option>
-          <option value="ben1@ecoraee.test">Entidad beneficiaria</option>
-        </select>
-        <p class="pie-login">Usuarios de prueba: contraseña <b>EcoRaee2026!</b></p>
-      </div>
-    </section>
+            <div class="olvido"><button type="button" id="olvido">¿Olvidó su contraseña?</button></div>
+            <div class="aviso error" id="error" hidden style="margin-top:16px"></div>
+            <button class="btn entrar" type="submit" id="entrar">Ingresar</button>
+          </form>
+          <div class="separador">o pruebe un rol</div>
+          <label class="sr-only" for="demo">Usuario de prueba</label>
+          <select class="demo" id="demo">
+            <option value="">Elegir un usuario de prueba…</option>
+            <option value="admin@ecoraee.test">Administrador</option>
+            <option value="gen1@ecoraee.test">Generador (estudiante)</option>
+            <option value="ope1@ecoraee.test">Operador de centro</option>
+            <option value="tec1@ecoraee.test">Técnico evaluador</option>
+            <option value="coo1@ecoraee.test">Coordinador logístico</option>
+            <option value="rea1@ecoraee.test">Reacondicionador (taller)</option>
+            <option value="rec1@ecoraee.test">Gestor de reciclaje</option>
+            <option value="ben1@ecoraee.test">Entidad beneficiaria</option>
+          </select>
+          <p class="pie-login">Usuarios de prueba: contraseña <b>EcoRaee2026!</b></p>
+        </div>
+        <footer class="pie-form">¿Problemas para ingresar? Escriba al administrador del sistema.</footer>
+      </section>
+    </div>
   </main>
   <script type="module" src="js/login.js"></script>
 </body>

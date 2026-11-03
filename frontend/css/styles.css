@@ -317,43 +317,63 @@ table.tabla { width: 100%; border-collapse: collapse; font-size: 13px; }
 .leyenda i.vacia { border-top-color: var(--g200); }
 .grande { font-family: var(--font-display); font-size: 46px; font-weight: 600; letter-spacing: -1px; line-height: 1; color: var(--g600); }
 
-/* ---------------------------------------------------------------- inicio de sesión (referencia 1) */
+/* ---------------------------------------------------------------- inicio de sesión */
 .login {
-  min-height: 100vh; display: grid; grid-template-columns: 1.15fr 1fr; padding: 22px; gap: 0;
-  background: var(--bg);
+  --lg-fondo: #2A4638; --lg-panel: #2F5A47; --lg-campo: #1F3B2F; --lg-boton: #5E9C95; --lg-boton-2: #4C8780; --lg-enlace: #8FCFC6;
+  --lg-mancha: #DCE8E3; --lg-mancha-2: #C6DAD2;
+  min-height: 100vh; display: grid; place-items: center; padding: 40px 24px; position: relative; overflow: hidden;
+  background: radial-gradient(120% 90% at 0% 100%, #335B49 0 30%, transparent 30.2%), radial-gradient(70% 60% at 100% 0%, #31574A 0 35%, transparent 35.2%), var(--lg-fondo);
 }
-.login .escena {
-  position: relative; border-radius: 30px 0 0 30px; overflow: hidden; min-height: 600px;
-  background: #CDBFA9 url("../assets/img/login-escena.svg") center bottom / cover no-repeat;
-  display: flex; flex-direction: column; padding: 40px 46px; color: #fff;
+.login .burbuja { position: absolute; border-radius: 50%; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.22), rgba(255,255,255,.04) 70%); pointer-events: none; }
+.login .b1 { width: 60px; height: 60px; left: 4%; top: 6%; } .login .b2 { width: 110px; height: 110px; right: 6%; bottom: 8%; }
+.login .b3 { width: 34px; height: 34px; left: 18%; top: 3%; } .login .b4 { width: 80px; height: 80px; right: 22%; top: 4%; }
+.tarjeta-login {
+  position: relative; width: min(1100px, 100%); min-height: 620px; border-radius: 40px; overflow: hidden;
+  background: var(--lg-panel); display: grid; grid-template-columns: 1.25fr 1fr; box-shadow: 0 40px 80px -30px rgba(0,0,0,.55);
 }
-.login .escena::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(48, 40, 28, .38) 0%, rgba(48, 40, 28, 0) 62%); pointer-events: none; }
-.login .escena > * { position: relative; z-index: 1; }
-.login .escena .marca-login { font-family: var(--font-display); font-size: 26px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-.login .escena h1 { font-family: var(--font-display); color: #fff; font-size: clamp(38px, 4.6vw, 62px); line-height: 1.02; letter-spacing: -1.5px; margin-top: 90px; max-width: 11ch; font-weight: 700; text-shadow: 0 2px 30px rgba(0,0,0,.18); }
-.login .escena p { font-size: 17px; margin: 18px 0 0; max-width: 32ch; text-shadow: 0 1px 14px rgba(0,0,0,.25); }
-.login .lado-form {
-  background: linear-gradient(180deg, #D9CDB8 0%, #CBBDA5 100%); border-radius: 0 30px 30px 0; display: grid; place-items: center; padding: 30px;
-}
-.login .caja {
-  width: min(430px, 100%); background: var(--cream); border-radius: 30px; padding: 42px 38px 34px; box-shadow: 0 30px 60px -30px rgba(60, 48, 30, .45);
-}
-.login .caja h2 { text-align: center; font-weight: 600; font-size: 24px; margin-bottom: 30px; }
-.login .campo label { color: var(--ink); font-weight: 500; }
+.tarjeta-login .curva { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.tarjeta-login .curva path { fill: #fff; }
+.login .escena, .login .lado-form { position: relative; z-index: 1; }
+.login .escena { display: flex; flex-direction: column; padding: 34px 40px 26px; }
+.login .marcas { display: flex; align-items: center; gap: 16px; }
+.login .marca-login { font-family: var(--font-display); font-size: 24px; font-weight: 600; color: var(--lg-fondo); display: flex; align-items: center; gap: 10px; }
+.login .divisor { width: 1px; height: 32px; background: #D5DED9; }
+.login .uide { height: 40px; width: auto; }
+.login .mancha { position: relative; flex: 1; display: grid; place-items: center; margin: 18px 70px 6px 0; min-height: 360px; }
+.login .mancha::before, .login .mancha::after { content: ""; position: absolute; background: var(--lg-mancha); border-radius: 58% 42% 55% 45% / 52% 60% 40% 48%; }
+.login .mancha::before { inset: 4% 2% 2% 0; }
+.login .mancha::after { inset: 20% 16% 16% 14%; background: var(--lg-mancha-2); border-radius: 46% 54% 40% 60% / 55% 45% 55% 45%; opacity: .55; }
+.login .mancha img { position: relative; z-index: 1; width: min(92%, 470px); height: auto; filter: drop-shadow(0 18px 22px rgba(31, 59, 47, .25)); }
+.login .punto { position: absolute; z-index: 1; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #E6EEEA 75%); box-shadow: 0 6px 14px -6px rgba(42,70,56,.25); }
+.login .p1 { width: 48px; height: 48px; left: 4%; top: 6%; } .login .p2 { width: 26px; height: 26px; right: 10%; top: 2%; }
+.login .p3 { width: 38px; height: 38px; right: 2%; bottom: 18%; } .login .p4 { width: 18px; height: 18px; left: 12%; bottom: 10%; }
+.login .p5 { width: 64px; height: 64px; left: -2%; bottom: 30%; opacity: .7; }
+.login .lema { margin: 4px 0 0; color: var(--ink-2); font-size: 14px; max-width: 40ch; }
+.login .lema b { color: var(--lg-fondo); }
+.login .pie-escena { font-size: 11px; color: var(--ink-3); margin-top: 14px; }
+.login .lado-form { display: flex; flex-direction: column; justify-content: center; padding: 40px 48px 26px 30px; color: #fff; }
+.login .caja { width: min(340px, 100%); margin-left: auto; margin-right: 6%; }
+.login .caja h2 { font-size: 34px; font-weight: 700; color: #fff; margin: 0 0 24px; letter-spacing: -.5px; }
+.login .campo label { color: #EAF2EE; font-weight: 600; font-size: 14px; }
+.login .campo .msg { color: #FFB8A8; }
 .login .control { position: relative; }
-.login .control svg.i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--ink-2); }
-.login .control input { width: 100%; background: #fff; border: 1px solid #EEE7D8; border-radius: 12px; padding: 13px 44px 13px 42px; }
-.login .control input:focus { outline: none; border-color: var(--g400); box-shadow: 0 0 0 4px var(--g50); }
-.login .ojo { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); border: 0; background: none; cursor: pointer; padding: 6px; color: var(--ink-2); }
+.login .control svg.i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9FBAAE; }
+.login .control input { width: 100%; background: var(--lg-campo); color: #fff; border: 1px solid transparent; border-radius: 99px; padding: 12px 44px 12px 44px; }
+.login .control input::placeholder { color: #8AA699; }
+.login .control input:focus { outline: none; border-color: var(--lg-boton); box-shadow: 0 0 0 4px rgba(94,156,149,.25); }
+.login .campo.error .control input { border-color: #FF9C86; background: var(--lg-campo); }
+.login .ojo { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: 0; background: none; cursor: pointer; padding: 6px; color: #9FBAAE; }
 .login .ojo svg.i { position: static; transform: none; }
-.login .olvido { text-align: right; font-size: 12.5px; font-weight: 600; margin-top: 8px; }
-.login .olvido button { background: none; border: 0; cursor: pointer; color: var(--ink); font-weight: 600; padding: 0; }
-.login .btn.entrar { width: 100%; border-radius: 12px; padding: 14px; margin-top: 26px; font-size: 14.5px; background: var(--g500); }
-.login .btn.entrar:hover { background: var(--g600); }
-.login .separador { display: flex; align-items: center; gap: 14px; color: var(--ink-3); font-size: 12.5px; margin: 22px 0; }
-.login .separador::before, .login .separador::after { content: ""; height: 1px; background: #DDD3C1; flex: 1; }
-.login .demo { width: 100%; background: #fff; border: 1px solid #EEE7D8; border-radius: 12px; padding: 12px 14px; }
-.login .pie-login { text-align: center; font-size: 12.5px; margin-top: 18px; color: var(--ink-2); }
+.login .olvido { text-align: right; font-size: 12.5px; margin-top: 10px; }
+.login .olvido button { background: none; border: 0; cursor: pointer; color: var(--lg-enlace); text-decoration: underline; padding: 0; font: inherit; }
+.login .btn.entrar { width: 100%; border-radius: 99px; padding: 13px; margin-top: 22px; font-size: 15px; background: var(--lg-boton); color: #fff; justify-content: center; }
+.login .btn.entrar:hover { background: var(--lg-boton-2); }
+.login .separador { display: flex; align-items: center; gap: 14px; color: #B5CBC1; font-size: 12.5px; margin: 20px 0 14px; }
+.login .separador::before, .login .separador::after { content: ""; height: 1px; background: rgba(255,255,255,.18); flex: 1; }
+.login .demo { width: 100%; background: var(--lg-campo); color: #EAF2EE; border: 1px solid transparent; border-radius: 99px; padding: 11px 16px; }
+.login .pie-login { text-align: center; font-size: 12.5px; margin-top: 14px; color: #CFE0D8; }
+.login .pie-login b { color: #fff; }
+.login .pie-form { text-align: right; font-size: 11px; color: #B5CBC1; margin-top: 30px; }
 
 /* ---------------------------------------------------------------- adaptable */
 @media (max-width: 1180px) {
@@ -370,10 +390,14 @@ table.tabla { width: 100%; border-collapse: collapse; font-size: 13px; }
   .hero .ilustracion { display: none; }
   .ficha { grid-template-columns: 1fr; }
   .g-2, .g-3 { grid-template-columns: 1fr; }
-  .login { grid-template-columns: 1fr; padding: 0; }
-  .login .escena { border-radius: 0; min-height: 300px; }
-  .login .escena h1 { margin-top: 40px; }
-  .login .lado-form { border-radius: 0; }
+  .login { padding: 16px; }
+  .tarjeta-login { grid-template-columns: 1fr; border-radius: 28px; }
+  .tarjeta-login .curva { display: none; }
+  .login .escena { background: #fff; border-radius: 0 0 40% 0 / 0 0 40px 0; padding: 24px 20px; }
+  .login .mancha { min-height: 220px; margin: 12px 0 0; }
+  .login .lado-form { padding: 30px 20px 22px; }
+  .login .caja { margin: 0 auto; }
+  .login .pie-form { text-align: center; }
   .perfil .nombre, .perfil .rol { display: none; }
 }
 @media (max-width: 620px) {
