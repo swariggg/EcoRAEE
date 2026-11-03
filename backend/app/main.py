@@ -26,6 +26,15 @@ app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS, allow_cred
                    allow_methods=["*"], allow_headers=["Authorization", "Content-Type"])
 registrar_manejadores(app)
 
+
+@app.middleware("http")
+async def sin_cache_frontend(request, call_next):
+    """El navegador revalida HTML, CSS y JS en cada carga: así todos los usuarios ven siempre la última versión."""
+    respuesta = await call_next(request)
+    if not request.url.path.startswith("/api"):
+        respuesta.headers["Cache-Control"] = "no-cache"
+    return respuesta
+
 for r in (auth, catalogos, admin, solicitudes, dispositivos, procesos, evidencias, red, panel):
     app.include_router(r.router)
 
