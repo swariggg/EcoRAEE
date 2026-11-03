@@ -1,74 +1,121 @@
 # EcoRAEE Cloud
 
-Sistema de trazabilidad de residuos de aparatos eléctricos y electrónicos (RAEE) de la universidad.
-Proyecto Integrador UIDE · Ariana Remache, Elianna Suasnavas y Martín Calahorrano.
+**EcoRAEE Cloud** es un sistema desarrollado para gestionar y dar seguimiento a los residuos de aparatos eléctricos y electrónicos (RAEE) generados en la universidad.
 
-**Segundo avance:** versión local y funcional (frontend + API + base de datos). Nada se despliega en AWS en esta fase.
+El proyecto cuenta con una versión local funcional que incluye la interfaz web, el servidor y la base de datos.
 
-## Qué hay en el repositorio
+## Estructura del proyecto
 
-| Carpeta | Contenido |
+El repositorio está organizado en las siguientes carpetas:
+
+| Carpeta | Descripción |
 |---|---|
-| `frontend/` | Interfaz web en HTML, CSS y JavaScript (sin frameworks). Login, panel y pantallas CRUD por rol. |
-| `backend/` | API REST en Python con FastAPI. Validaciones, reglas de negocio, manejo de errores y pruebas de integración. |
-| `database/` | Base de datos v5 para SQL Server: esquema, datos de prueba, pruebas SQL, consultas y diagramas. |
-| `infrastructure/aws/` | Diseño de la arquitectura en AWS (para la fase de despliegue, no se usa en local). |
-| `docs/` | Guía de ejecución, roles y endpoints. |
-| `math/`, `innovation/`, `evidence/` | Componentes del integrador que se completan después. |
+| `frontend/` | Contiene la parte visual del sistema, desarrollada con HTML, CSS y JavaScript. Incluye el inicio de sesión, paneles y formularios según el rol de cada usuario. |
+| `backend/` | Contiene el servidor desarrollado en Python con FastAPI. Se encarga de procesar las solicitudes y aplicar las reglas del sistema. |
+| `database/` | Incluye los scripts de la base de datos para SQL Server 2022, junto con datos de prueba y consultas. |
+| `infrastructure/aws/` | Contiene la propuesta de arquitectura para una futura implementación en AWS. |
+| `docs/` | Incluye las instrucciones de instalación, funcionamiento y uso del sistema. |
+| `math/`, `innovation/`, `evidence/` | Carpetas destinadas a los demás componentes del proyecto integrador. |
 
-## Arquitectura local
+## ¿Cómo funciona el sistema?
 
-```
-Navegador ──HTTP──> FastAPI (localhost:8000) ──ODBC──> SQL Server (localhost, EcoRaEE_CLOUD)
-   │                     │
-   └── frontend/ servido por la misma API      └── backend/uploads/ (evidencias en local)
-```
+El sistema funciona de manera local y conecta tres componentes principales:
 
-- **Frontend:** SPA en JavaScript con rutas `#/...`, formularios con validación en el cliente y mensajes del servidor por campo.
-- **Backend:** FastAPI + pyodbc. Contraseñas con bcrypt, sesión con JWT, permisos por rol, auditoría de acciones.
-- **Base de datos:** SQL Server con PK, FK, CHECK, UNIQUE, triggers (RN-01 a RN-08) y procedimientos almacenados transaccionales.
-- **Flujo máximo:** algoritmo de Edmonds-Karp sobre la red logística (`backend/app/flujo.py`), con corte mínimo.
+1. **Frontend:** es la interfaz que utiliza el usuario para ingresar al sistema y realizar las diferentes actividades.
+2. **Backend:** procesa la información, valida los datos y controla los permisos de cada usuario.
+3. **Base de datos:** almacena los usuarios, registros, equipos y demás información del proceso RAEE.
 
-## Cómo ejecutarlo
+Para esta versión se utilizan las siguientes tecnologías:
 
-Los pasos completos están en **[docs/GUIA_EJECUCION.md](docs/GUIA_EJECUCION.md)**. En resumen:
+- **Frontend:** HTML, CSS y JavaScript.
+- **Backend:** Python con FastAPI.
+- **Base de datos:** SQL Server 2022.
+- **Conexión:** API REST y ODBC.
+- **Seguridad:** contraseñas protegidas con bcrypt, autenticación mediante JWT y permisos según el rol del usuario.
+- **Archivos:** almacenamiento local de evidencias y documentos.
+
+Además, el sistema incluye un algoritmo de Edmonds-Karp, utilizado para calcular el flujo máximo dentro de la red logística de gestión de residuos.
+
+## Instalación y ejecución
+
+Para ejecutar el proyecto en un equipo local, primero se debe preparar la base de datos y después iniciar el servidor.
+
+Los pasos completos se encuentran en el archivo `docs/GUIA_EJECUCION.md`.
+
+A continuación, se muestran los pasos principales:
+
+**1. Preparar la base de datos**
+
+Desde SQL Server Management Studio (SSMS), ejecutar los siguientes scripts:
+
+- `database/01_esquema.sql`
+- `database/02_datos.sql`
+- `database/05_usuarios_demo.sql`
+
+**2. Preparar el backend**
+
+Abrir una terminal y ejecutar:
 
 ```bash
-# 1. En SSMS ejecutar: database/01_esquema.sql, 02_datos.sql y 05_usuarios_demo.sql
 cd backend
 python -m venv .venv
-.venv\Scripts\activate            # Windows
+.venv\Scripts\activate
 pip install -r requirements.txt
-copy .env.example .env            # Windows (cp en Linux/Mac)
-python -m uvicorn app.main:app --reload
-# 2. Abrir http://localhost:8000
+copy .env.example .env
 ```
 
-Usuarios de prueba (todos con la contraseña `EcoRaee2026!`, solo para la base local):
+**3. Iniciar el servidor**
 
-| Correo | Rol |
+```bash
+python -m uvicorn app.main:app --reload
+```
+
+**4. Abrir el sistema**
+
+Una vez iniciado el servidor, ingresar desde el navegador a:
+
+`http://localhost:8000`
+
+## Usuarios de prueba
+
+El sistema incluye varias cuentas para probar las funciones de cada rol.
+
+Todas utilizan la misma contraseña: `EcoRaee2026!`.
+
+| Correo electrónico | Rol |
 |---|---|
-| admin@ecoraee.test | Administrador |
-| gen1@ecoraee.test | Generador (estudiante) |
-| ope1@ecoraee.test | Operador de centro |
-| tec1@ecoraee.test | Técnico evaluador |
-| coo1@ecoraee.test | Coordinador logístico |
-| rea1@ecoraee.test | Reacondicionador |
-| rec1@ecoraee.test | Gestor de reciclaje |
-| ben1@ecoraee.test | Beneficiario |
-| tec2@ecoraee.test | Técnico inactivo (no puede entrar, sirve para probar) |
+| `admin@ecoraee.test` | Administrador |
+| `gen1@ecoraee.test` | Generador (estudiante) |
+| `ope1@ecoraee.test` | Operador de centro |
+| `tec1@ecoraee.test` | Técnico evaluador |
+| `coo1@ecoraee.test` | Coordinador logístico |
+| `rea1@ecoraee.test` | Reacondicionador |
+| `rec1@ecoraee.test` | Gestor de reciclaje |
+| `ben1@ecoraee.test` | Beneficiario |
+| `tec2@ecoraee.test` | Técnico inactivo (cuenta utilizada para realizar pruebas de acceso) |
 
-## Pruebas
+*Nota: Estas cuentas son únicamente para pruebas en el entorno local.*
+
+## Pruebas del sistema
+
+Para comprobar que el backend funciona correctamente, se pueden ejecutar las pruebas automatizadas con el siguiente comando:
 
 ```bash
 cd backend
 python -m pytest -v
 ```
 
-12 pruebas de integración contra la base real: login y roles, CRUD con integridad referencial,
-validaciones, ciclo completo de un equipo, rollback por capacidad (RN-06) y flujo máximo de los 5 escenarios.
+El proyecto cuenta con 12 pruebas de integración que permiten verificar diferentes funcionalidades, entre ellas:
 
-## Créditos de imágenes
+- Inicio de sesión y permisos según el rol.
+- Creación, consulta, actualización y eliminación de registros.
+- Validación de datos y relaciones entre tablas.
+- Seguimiento del proceso completo de un equipo.
+- Control de capacidad y reversión de operaciones cuando se incumple la regla RN-06.
+- Cálculo de flujo máximo en cinco escenarios diferentes.
 
-Las ilustraciones (`frontend/assets/img/` y `frontend/js/ilustraciones.js`) son SVG originales hechos para este proyecto.
-Las fuentes son Fraunces y Plus Jakarta Sans de Google Fonts (licencia OFL).
+## Créditos
+
+Las ilustraciones utilizadas en el sistema fueron creadas especialmente para este proyecto y se encuentran en `frontend/assets/img/` y `frontend/js/ilustraciones.js`.
+
+Para los textos se utilizan las fuentes **Fraunces** y **Plus Jakarta Sans**, obtenidas de Google Fonts y distribuidas bajo licencia OFL.
