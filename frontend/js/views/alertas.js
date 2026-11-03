@@ -1,6 +1,6 @@
-import { api } from "../api.js";
-import { icono } from "../ilustraciones.js";
-import { esc, estado, fmt, mostrarError, tabla, toast } from "../ui.js";
+import { api } from "../api.js?v=20261103b";
+import { icono } from "../ilustraciones.js?v=20261103b";
+import { esc, estado, fmt, mostrarError, tabla, toast } from "../ui.js?v=20261103b";
 
 export async function render(v, ctx) {
   const filas = await api.get("/api/alertas");

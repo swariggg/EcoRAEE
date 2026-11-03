@@ -1,7 +1,7 @@
 // Pantalla genérica de lista + crear/editar/eliminar (centros, destinos, catálogos, usuarios).
-import { api, limpiarCache } from "../api.js";
-import { icono } from "../ilustraciones.js";
-import { confirmar, esc, formulario, mostrarError, tabla, toast } from "../ui.js";
+import { api, limpiarCache } from "../api.js?v=20261103b";
+import { icono } from "../ilustraciones.js?v=20261103b";
+import { confirmar, esc, formulario, mostrarError, tabla, toast } from "../ui.js?v=20261103b";
 
 /**
  * conf: { titulo, sub, ruta, pk, columnas, campos (o async fn), puedeEditar, textoBorrar, nombre(fila), cache, alClic, sinBorrar }

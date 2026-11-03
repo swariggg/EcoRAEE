@@ -1,8 +1,8 @@
-import { api, catalogo } from "../api.js";
-import { asignarDestino, evaluar, mover, subirEvidencia, verEvidencia } from "../acciones.js";
-import { icono, iconoCategoria } from "../ilustraciones.js";
-import { confirmar, enlazarTabla, esc, estado, fmt, formulario, mostrarError, tabla, toast } from "../ui.js";
-import { CAMPOS_DISP } from "./solicitudes.js";
+import { api, catalogo } from "../api.js?v=20261103b";
+import { asignarDestino, evaluar, mover, subirEvidencia, verEvidencia } from "../acciones.js?v=20261103b";
+import { icono, iconoCategoria } from "../ilustraciones.js?v=20261103b";
+import { confirmar, enlazarTabla, esc, estado, fmt, formulario, mostrarError, tabla, toast } from "../ui.js?v=20261103b";
+import { CAMPOS_DISP } from "./solicitudes.js?v=20261103b";
 
 const ESTADOS = ["Registrado", "Recolectado", "Evaluado", "Reacondicionamiento", "Asignado", "Reciclaje", "Valorizado", "Disposicion", "Cerrado"];
 const RUTAS = {   // ciclo de vida (Apéndice A.4) según el destino

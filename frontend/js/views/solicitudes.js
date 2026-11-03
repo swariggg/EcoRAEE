@@ -1,6 +1,6 @@
-import { api, catalogo } from "../api.js";
-import { icono } from "../ilustraciones.js";
-import { confirmar, enlazarTabla, esc, estado, fmt, formulario, mostrarError, opciones, tabla, toast, validar } from "../ui.js";
+import { api, catalogo } from "../api.js?v=20261103b";
+import { icono } from "../ilustraciones.js?v=20261103b";
+import { confirmar, enlazarTabla, esc, estado, fmt, formulario, mostrarError, opciones, tabla, toast, validar } from "../ui.js?v=20261103b";
 
 const CAMPOS_DISP = (cats, marcas) => [
   { n: "id_categoria", l: "Categoría", tipo: "select", req: true, opciones: opciones(cats, "id_categoria", "nombre_categoria") },

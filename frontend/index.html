@@ -8,7 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=20261103b">
+  <!-- Descarga en paralelo los módulos que siempre se usan (evita la cascada de importaciones). -->
+  <link rel="modulepreload" href="js/app.js?v=20261103b">
+  <link rel="modulepreload" href="js/api.js?v=20261103b">
+  <link rel="modulepreload" href="js/ui.js?v=20261103b">
+  <link rel="modulepreload" href="js/ilustraciones.js?v=20261103b">
+  <link rel="modulepreload" href="js/views/panel.js?v=20261103b">
 </head>
 <body>
   <div class="app">
@@ -25,6 +31,6 @@
     </header>
     <main class="contenido" id="vista" tabindex="-1"></main>
   </div>
-  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/app.js?v=20261103b"></script>
 </body>
 </html>

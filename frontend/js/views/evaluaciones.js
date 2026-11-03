@@ -1,7 +1,7 @@
-import { api, catalogo } from "../api.js";
-import { evaluar, subirEvidencia } from "../acciones.js";
-import { icono } from "../ilustraciones.js";
-import { esc, estado, fmt, formulario, opciones, tabla, toast } from "../ui.js";
+import { api, catalogo } from "../api.js?v=20261103b";
+import { evaluar, subirEvidencia } from "../acciones.js?v=20261103b";
+import { icono } from "../ilustraciones.js?v=20261103b";
+import { esc, estado, fmt, formulario, opciones, tabla, toast } from "../ui.js?v=20261103b";
 
 export async function render(v, ctx) {
   const esTec = ctx.rol === "TEC";

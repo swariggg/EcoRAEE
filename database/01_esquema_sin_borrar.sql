@@ -12,6 +12,10 @@ USE master;
 GO
 CREATE DATABASE EcoRaEE_CLOUD;
 GO
+-- En SQL Server Express AUTO_CLOSE viene activado: cierra la base cuando no hay conexiones
+-- y la vuelve a abrir en la siguiente petición (la API se siente lenta). Se desactiva.
+ALTER DATABASE EcoRaEE_CLOUD SET AUTO_CLOSE OFF;
+GO
 USE EcoRaEE_CLOUD;
 GO
 

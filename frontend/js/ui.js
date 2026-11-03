@@ -1,7 +1,7 @@
 // Utilidades de interfaz: escapar texto, formatos, insignias, tablas, modales con
 // formularios validados, confirmaciones y notificaciones.
-import { ErrorApi } from "./api.js";
-import { icono, VACIO } from "./ilustraciones.js";
+import { ErrorApi } from "./api.js?v=20261103b";
+import { icono, VACIO } from "./ilustraciones.js?v=20261103b";
 
 export const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 

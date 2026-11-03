@@ -1,7 +1,7 @@
-import { api } from "../api.js";
-import { asignarDestino, subirEvidencia } from "../acciones.js";
-import { icono } from "../ilustraciones.js";
-import { esc, estado, fmt, formulario, mostrarError, opciones, tabla, toast } from "../ui.js";
+import { api } from "../api.js?v=20261103b";
+import { asignarDestino, subirEvidencia } from "../acciones.js?v=20261103b";
+import { icono } from "../ilustraciones.js?v=20261103b";
+import { esc, estado, fmt, formulario, mostrarError, opciones, tabla, toast } from "../ui.js?v=20261103b";
 
 const TIPO_TRAT = { Reacondicionamiento: "Reacondicionamiento", Reciclaje: "Reciclaje", Disposicion: "Disposicion_controlada" };
 

@@ -1,5 +1,5 @@
-import { api, ErrorApi, guardarSesion, sesion } from "./api.js";
-import { icono, LOGO } from "./ilustraciones.js";
+import { api, ErrorApi, guardarSesion, sesion } from "./api.js?v=20261103b";
+import { icono, LOGO } from "./ilustraciones.js?v=20261103b";
 
 if (sesion()?.token) location.href = "index.html";
 

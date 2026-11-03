@@ -1,7 +1,7 @@
 // Inicio: titular con palabra resaltada, imagen recortada, cinta y estadísticas solo con números.
-import { api } from "../api.js";
-import { icono } from "../ilustraciones.js";
-import { esc, estado, fmt, tabla } from "../ui.js";
+import { api } from "../api.js?v=20261103b";
+import { icono } from "../ilustraciones.js?v=20261103b";
+import { esc, estado, fmt, tabla } from "../ui.js?v=20261103b";
 
 const FOTO = "assets/img/raee-equipos.jpg";
 

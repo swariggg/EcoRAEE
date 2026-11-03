@@ -1,5 +1,5 @@
-import { api } from "../api.js";
-import { esc, fmt, tabla } from "../ui.js";
+import { api } from "../api.js?v=20261103b";
+import { esc, fmt, tabla } from "../ui.js?v=20261103b";
 
 export async function render(v, ctx) {
   const t = ctx.params.get("tabla") || "";

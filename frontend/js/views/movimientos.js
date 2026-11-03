@@ -1,7 +1,7 @@
-import { api } from "../api.js";
-import { mover, subirEvidencia } from "../acciones.js";
-import { icono } from "../ilustraciones.js";
-import { esc, estado, fmt, mostrarError, tabla, toast } from "../ui.js";
+import { api } from "../api.js?v=20261103b";
+import { mover, subirEvidencia } from "../acciones.js?v=20261103b";
+import { icono } from "../ilustraciones.js?v=20261103b";
+import { esc, estado, fmt, mostrarError, tabla, toast } from "../ui.js?v=20261103b";
 
 export async function render(v, ctx) {
   const filtro = ctx.params.get("estado") || "";
@@ -30,7 +30,7 @@ export async function render(v, ctx) {
   }));
   v.querySelector("#nuevo")?.addEventListener("click", async () => {
     const enCentro = evaluados.filter((d) => d.id_centro_actual);
-    const { formulario, opciones } = await import("../ui.js");
+    const { formulario, opciones } = await import("../ui.js?v=20261103b");
     formulario({ titulo: "¿Qué equipo se mueve?", subtitulo: "Equipos evaluados que están en un centro", boton: "Continuar",
       campos: [{ n: "id", l: "Equipo", tipo: "select", req: true, opciones: opciones(enCentro, "id_dispositivo", (d) => `${d.id_dispositivo} · ${d.nombre_categoria} · ${d.nombre_centro}`) }],
       enviar: async ({ id }) => { setTimeout(() => mover(enCentro.find((d) => d.id_dispositivo === id), () => { ctx.refrescar(); ctx.refrescarContadores(); }), 0); } });

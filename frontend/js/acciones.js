@@ -1,6 +1,6 @@
 // Acciones del ciclo de vida que se usan desde varias pantallas.
-import { api, API_BASE, catalogo, limpiarCache, sesion } from "./api.js";
-import { formulario, opciones, toast } from "./ui.js";
+import { api, API_BASE, catalogo, limpiarCache, sesion } from "./api.js?v=20261103b";
+import { formulario, opciones, toast } from "./ui.js?v=20261103b";
 
 export async function evaluar(idDispositivo, alTerminar) {
   const [conds, clas] = await Promise.all([catalogo("/api/catalogos/condiciones"), catalogo("/api/catalogos/clasificaciones")]);

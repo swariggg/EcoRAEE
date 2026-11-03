@@ -1,7 +1,7 @@
 // Aplicación de una sola página: menú por rol, barra superior y rutas (#/ruta/id).
-import { api, cerrarSesion, sesion } from "./api.js";
-import { icono, LOGO } from "./ilustraciones.js";
-import { cargando, esc, mostrarError } from "./ui.js";
+import { api, cerrarSesion, sesion } from "./api.js?v=20261103b";
+import { icono, LOGO } from "./ilustraciones.js?v=20261103b";
+import { cargando, esc, mostrarError } from "./ui.js?v=20261103b";
 
 const s = sesion();
 if (!s?.token) location.href = "login.html";
@@ -26,20 +26,20 @@ const MENU = [
   ["auditoria", "Auditoría", "auditoria", ["ADM"], "Administración"],
 ];
 const VISTAS = {
-  panel: () => import("./views/panel.js"),
-  solicitudes: () => import("./views/solicitudes.js"),
-  dispositivos: () => import("./views/dispositivos.js"),
-  evaluaciones: () => import("./views/evaluaciones.js"),
-  movimientos: () => import("./views/movimientos.js"),
-  transferencias: () => import("./views/transferencias.js"),
-  evidencias: () => import("./views/evidencias.js"),
-  red: () => import("./views/red.js"),
-  centros: () => import("./views/centros.js"),
-  destinos: () => import("./views/destinos.js"),
-  catalogos: () => import("./views/catalogos.js"),
-  usuarios: () => import("./views/usuarios.js"),
-  auditoria: () => import("./views/auditoria.js"),
-  alertas: () => import("./views/alertas.js"),
+  panel: () => import("./views/panel.js?v=20261103b"),
+  solicitudes: () => import("./views/solicitudes.js?v=20261103b"),
+  dispositivos: () => import("./views/dispositivos.js?v=20261103b"),
+  evaluaciones: () => import("./views/evaluaciones.js?v=20261103b"),
+  movimientos: () => import("./views/movimientos.js?v=20261103b"),
+  transferencias: () => import("./views/transferencias.js?v=20261103b"),
+  evidencias: () => import("./views/evidencias.js?v=20261103b"),
+  red: () => import("./views/red.js?v=20261103b"),
+  centros: () => import("./views/centros.js?v=20261103b"),
+  destinos: () => import("./views/destinos.js?v=20261103b"),
+  catalogos: () => import("./views/catalogos.js?v=20261103b"),
+  usuarios: () => import("./views/usuarios.js?v=20261103b"),
+  auditoria: () => import("./views/auditoria.js?v=20261103b"),
+  alertas: () => import("./views/alertas.js?v=20261103b"),
 };
 const puede = (roles) => !roles || roles.includes(rol);
 

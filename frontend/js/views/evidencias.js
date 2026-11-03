@@ -1,7 +1,7 @@
-import { api } from "../api.js";
-import { verEvidencia } from "../acciones.js";
-import { icono } from "../ilustraciones.js";
-import { esc, estado, fmt, tabla } from "../ui.js";
+import { api } from "../api.js?v=20261103b";
+import { verEvidencia } from "../acciones.js?v=20261103b";
+import { icono } from "../ilustraciones.js?v=20261103b";
+import { esc, estado, fmt, tabla } from "../ui.js?v=20261103b";
 
 export async function render(v) {
   const filas = await api.get("/api/evidencias");

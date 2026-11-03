@@ -46,10 +46,13 @@ def traducir_error_sql(exc: pyodbc.Error) -> tuple[int, str, int | None]:
         if "FOREIGN KEY" in msg:
             return 400, "Uno de los datos hace referencia a un registro que no existe.", numero
         if "CHECK" in msg:
-            restr = re.search(r'constraint "([^"]+)"', msg)
-            nombre = restr.group(1) if restr else ""
-            if nombre in RESTRICCIONES:
+            # Se busca el nombre de la restricción sin depender del idioma de SQL Server
+            # (en inglés: constraint "x"; en español: restricción CHECK "x").
+            nombre = next((n for n in RESTRICCIONES if n in msg), "")
+            if nombre:
                 return 409, RESTRICCIONES[nombre], numero
+            restr = re.search(r"""CHECK\s*(?:constraint\s*)?["'«]([^"'»]+)""", msg)
+            nombre = restr.group(1) if restr else ""
             return 400, f"Un dato no cumple las reglas de la base de datos ({nombre}).", numero
     if numero == 3609:
         return 409, "La operación fue revertida por una regla de negocio.", numero

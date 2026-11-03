@@ -23,6 +23,7 @@ En SSMS, conectado a `localhost` con autenticación de Windows, abra y ejecute *
 1. `database/01_esquema.sql` → crea la base `EcoRaEE_CLOUD` con tablas, restricciones, triggers, vistas y procedimientos. **Si la base ya existe, la borra y la vuelve a crear.**
 2. `database/02_datos.sql` → datos de prueba (organizaciones, centros, equipos, evaluaciones, red logística y 5 escenarios).
 3. `database/05_usuarios_demo.sql` → pone la contraseña `EcoRaee2026!` a los usuarios de prueba.
+4. `database/06_rendimiento.sql` → solo si la base se creó antes del 3 de noviembre: apaga AUTO_CLOSE (los scripts nuevos ya lo hacen).
 
 Opcionales: `03_pruebas.sql` (pruebas de reglas de negocio en SQL) y `04_consultas.sql` (consultas del informe).
 Si quiere conservar una base existente, use `01_esquema_sin_borrar.sql` en lugar de `01_esquema.sql`.
@@ -39,7 +40,7 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 copy .env.example .env
-python -m uvicorn app.main:app --reload
+python -m uvicorn app.main:app
 ```
 
 - Con autenticación de Windows y servidor `localhost` **no hay que cambiar nada** en `.env`.
@@ -111,3 +112,4 @@ El backend aplica estos permisos en cada endpoint (no solo oculta el menú): una
 | `/api/health` responde error de certificado | Ya se usa `TrustServerCertificate=yes`; revise que sea el driver 18 o 17. |
 | No puedo entrar con los usuarios | Falta ejecutar `05_usuarios_demo.sql`. |
 | La página carga pero sin datos | La API no está corriendo o el puerto no es 8000. |
+| Todo carga lento | 1) Ejecute una vez `database/06_rendimiento.sql` (apaga AUTO_CLOSE de SQL Server Express). 2) Arranque uvicorn **sin** `--reload`: vigilar archivos dentro de OneDrive vuelve lenta la API. 3) En F12 › Red, la columna Tiempos muestra `app` = lo que tardó la API; en la consola de uvicorn aparecen las peticiones de más de 1 s. |

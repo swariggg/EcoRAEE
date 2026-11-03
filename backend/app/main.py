@@ -5,6 +5,7 @@ Ejecutar desde la carpeta backend/:
 y abrir http://localhost:8000 (frontend) o http://localhost:8000/docs (documentación de la API).
 """
 import logging
+import time
 
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,10 +28,23 @@ app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS, allow_cred
 registrar_manejadores(app)
 
 
+log = logging.getLogger("ecoraee")
+
+
 @app.middleware("http")
-async def sin_cache_frontend(request, call_next):
-    """El navegador revalida HTML, CSS y JS en cada carga: así todos los usuarios ven siempre la última versión."""
+async def cache_y_tiempos(request, call_next):
+    """Mide cada petición y evita archivos viejos del frontend.
+
+    - Cabecera Server-Timing: en F12 > Red > Tiempos se ve cuánto tardó la API.
+    - Peticiones de más de 1 s quedan avisadas en la consola de uvicorn.
+    - El navegador revalida HTML, CSS y JS en cada carga (304 si no cambiaron).
+    """
+    inicio = time.perf_counter()
     respuesta = await call_next(request)
+    ms = (time.perf_counter() - inicio) * 1000
+    respuesta.headers["Server-Timing"] = f"app;dur={ms:.0f}"
+    if ms > 1000:
+        log.warning("Petición lenta: %s %s tardó %.0f ms", request.method, request.url.path, ms)
     if not request.url.path.startswith("/api"):
         respuesta.headers["Cache-Control"] = "no-cache"
     return respuesta

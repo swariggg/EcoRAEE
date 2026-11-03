@@ -1,6 +1,6 @@
-import { catalogo } from "../api.js";
-import { esc, estado, opciones } from "../ui.js";
-import { crud } from "./crud.js";
+import { catalogo } from "../api.js?v=20261103b";
+import { esc, estado, opciones } from "../ui.js?v=20261103b";
+import { crud } from "./crud.js?v=20261103b";
 
 export async function render(v, ctx) {
   return crud(v, {

@@ -1,6 +1,6 @@
-import { api } from "../api.js";
-import { icono } from "../ilustraciones.js";
-import { confirmar, esc, fmt, formulario, mostrarError, tabla, toast } from "../ui.js";
+import { api } from "../api.js?v=20261103b";
+import { icono } from "../ilustraciones.js?v=20261103b";
+import { confirmar, esc, fmt, formulario, mostrarError, tabla, toast } from "../ui.js?v=20261103b";
 
 // Capas por camino más largo desde la fuente (la red es un DAG): fuente a la izquierda, sumidero a la derecha.
 function capas(aristas, fuente, sumidero) {

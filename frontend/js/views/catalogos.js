@@ -1,6 +1,6 @@
-import { api } from "../api.js";
-import { esc, tabla } from "../ui.js";
-import { crud } from "./crud.js";
+import { api } from "../api.js?v=20261103b";
+import { esc, tabla } from "../ui.js?v=20261103b";
+import { crud } from "./crud.js?v=20261103b";
 
 const CONF = {
   categorias: { t: "Categorías", pk: "id_categoria", campos: [{ n: "nombre_categoria", l: "Nombre", req: true, maxlength: 50, completo: true }], nombre: "nombre_categoria" },
