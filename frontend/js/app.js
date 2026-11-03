@@ -43,29 +43,40 @@ const VISTAS = {
 };
 const puede = (roles) => !roles || roles.includes(rol);
 
-// ------------------------------------------------------------------ menú lateral
-const lateral = document.getElementById("lateral");
-const grupos = [...new Set(MENU.map((m) => m[4]))];
-lateral.innerHTML = `<a class="marca" href="#/panel">${LOGO}<span><b>EcoRAEE</b><small>Trazabilidad de RAEE</small></span></a>
-  <nav class="nav">${grupos.map((g) => {
-    const items = MENU.filter((m) => m[4] === g && puede(m[3]));
-    return items.length ? `<div class="nav-grupo"><h4>${g}</h4>${items.map(([r, t, i]) =>
-      `<a href="#/${r}" data-ruta="${r}">${icono(i)}<span>${t}</span><span class="cuenta" data-cuenta="${r}" hidden></span></a>`).join("")}</div>` : "";
-  }).join("")}</nav>
-  <div class="pie"><b>Entorno local</b>Frontend, API y SQL Server en su computadora. Sin servicios en la nube.</div>`;
+// ------------------------------------------------------------------ menú superior con grupos desplegables
+const nav = document.getElementById("nav");
+const grupos = ["Operación", "Análisis", "Administración"];
+document.getElementById("marca").innerHTML = `${LOGO}<b>EcoRAEE</b>`;
+nav.innerHTML = `<a href="#/panel" data-ruta="panel">Inicio</a>${grupos.map((g) => {
+  const items = MENU.filter((m) => m[4] === g && m[0] !== "panel" && puede(m[3]));
+  return items.length ? `<div class="grupo" data-grupo="${g}">
+    <button type="button" aria-haspopup="true" aria-expanded="false">${g}${icono("abajo")}</button>
+    <div class="desplegable">${items.map(([r, t, i]) =>
+      `<a href="#/${r}" data-ruta="${r}"><span class="ic">${icono(i)}</span><span>${t}</span><span class="cuenta" data-cuenta="${r}" hidden></span></a>`).join("")}</div></div>` : "";
+}).join("")}`;
+// Teclado y pantallas táctiles: el botón del grupo abre o cierra su lista.
+nav.querySelectorAll(".grupo > button").forEach((b) => b.addEventListener("click", () => {
+  const g = b.parentElement, abrir = !g.classList.contains("abierto");
+  nav.querySelectorAll(".grupo").forEach((x) => { x.classList.remove("abierto"); x.firstElementChild.setAttribute("aria-expanded", "false"); });
+  g.classList.toggle("abierto", abrir); b.setAttribute("aria-expanded", String(abrir));
+}));
+document.addEventListener("click", (e) => { if (!nav.contains(e.target)) nav.querySelectorAll(".grupo").forEach((x) => x.classList.remove("abierto")); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") nav.querySelectorAll(".grupo").forEach((x) => x.classList.remove("abierto")); });
 
-document.getElementById("abrir-menu").innerHTML = icono("menu");
-document.getElementById("abrir-menu").onclick = () => lateral.classList.toggle("abierto");
+const botonMenu = document.getElementById("abrir-menu");
+botonMenu.innerHTML = icono("menu");
+botonMenu.onclick = () => botonMenu.setAttribute("aria-expanded", String(nav.classList.toggle("abierto")));
+window.addEventListener("scroll", () => document.getElementById("barra").classList.toggle("sombra", scrollY > 8), { passive: true });
 
 // ------------------------------------------------------------------ barra superior
 const iniciales = `${(usuario.nombres || "?")[0]}${(usuario.apellidos || "")[0] || ""}`.toUpperCase();
-document.getElementById("derecha").innerHTML = `
+document.getElementById("derecha").insertAdjacentHTML("beforeend", `
   ${PERSONAL.includes(rol) ? `<a class="btn-icono" href="#/alertas" aria-label="Alertas" title="Alertas de capacidad">${icono("campana")}<span class="punto" id="n-alertas" hidden></span></a>` : ""}
   <div class="perfil" title="${esc(usuario.correo_institucional)}">
     <span class="avatar">${esc(iniciales)}</span>
     <span><div class="nombre">${esc(usuario.nombres)} ${esc(usuario.apellidos)}</div><div class="rol">${esc(usuario.nombre_rol)}</div></span>
   </div>
-  <button class="btn-icono" id="salir" aria-label="Cerrar sesión" title="Cerrar sesión">${icono("salir")}</button>`;
+  <button class="btn-icono" id="salir" aria-label="Cerrar sesión" title="Cerrar sesión">${icono("salir")}</button>`);
 document.getElementById("salir").onclick = cerrarSesion;
 const busc = document.getElementById("buscador");
 busc.insertAdjacentHTML("afterbegin", icono("buscar"));
@@ -98,10 +109,12 @@ async function navegar() {
   const nombre = VISTAS[ruta] ? ruta : "panel";
   const item = MENU.find((m) => m[0] === nombre);
   const vista = document.getElementById("vista");
-  lateral.classList.remove("abierto");
-  document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("activo", a.dataset.ruta === nombre));
+  nav.classList.remove("abierto");
+  nav.querySelectorAll(".grupo").forEach((g) => g.classList.remove("abierto"));
+  nav.querySelectorAll("a").forEach((a) => a.classList.toggle("activo", a.dataset.ruta === nombre));
+  nav.querySelectorAll(".grupo").forEach((g) => g.classList.toggle("activo", !!g.querySelector("a.activo")));
   if (item && !puede(item[3])) {
-    vista.innerHTML = `<div class="tarjeta"><h3>Sin permiso</h3><p class="muted">Su rol (${esc(usuario.nombre_rol)}) no puede ver esta sección.</p></div>`;
+    vista.innerHTML = `<div class="cabecera"><div><h1>Sin permiso</h1></div></div><div class="tarjeta"><p class="muted">Su rol (${esc(usuario.nombre_rol)}) no puede ver esta sección.</p></div>`;
     return;
   }
   vista.innerHTML = cargando();

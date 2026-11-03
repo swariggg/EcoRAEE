@@ -1,105 +1,101 @@
+// Inicio: titular con palabra resaltada, imagen recortada, cinta y estadísticas solo con números.
 import { api } from "../api.js";
-import { HERO, icono, iconoCategoria } from "../ilustraciones.js";
+import { icono } from "../ilustraciones.js";
 import { esc, estado, fmt, tabla } from "../ui.js";
 
-const ORDEN = ["Registrado", "Recolectado", "Evaluado", "Reacondicionamiento", "Asignado", "Reciclaje", "Valorizado", "Disposicion", "Cerrado"];
+const FOTO = "assets/img/raee-equipos.jpg";
 
-function saludo() {
-  const h = new Date().getHours();
-  return h < 12 ? "Buenos días" : h < 19 ? "Buenas tardes" : "Buenas noches";
-}
+// Botón principal según lo que cada rol hace más seguido.
+const ACCION = {
+  GEN: ["#/solicitudes", "Nueva solicitud"], OPE: ["#/solicitudes", "Ver solicitudes"], COO: ["#/dispositivos", "Ver equipos"],
+  TEC: ["#/evaluaciones", "Evaluar equipos"], REA: ["#/transferencias", "Ver destinos asignados"], BEN: ["#/transferencias", "Ver destinos asignados"],
+  ADM: ["#/dispositivos", "Ver equipos"],
+};
 
-function barras(filas, total) {
-  const max = Math.max(1, ...filas.map((f) => f.n));
-  return `<div class="barras" role="list">${ORDEN.map((e) => filas.find((f) => f.estado_actual === e) || { estado_actual: e, n: 0, kg: 0 })
-    .map((f) => `<div class="barra-fila" role="listitem" title="${esc(f.estado_actual)}: ${f.n} equipos · ${fmt.kg(f.kg)}">
-      <span>${estado(f.estado_actual)}</span>
-      <div class="pista"><div class="relleno" style="width:${(100 * f.n) / max}%"></div></div>
-      <span class="num">${f.n} <small>${total ? Math.round((100 * f.n) / total) : 0}%</small></span></div>`).join("")}</div>`;
-}
-
-function anillo(c) {
-  const r = 46, L = 2 * Math.PI * r, pct = Math.min(100, Number(c.ocupacion_pct) || 0);
-  return `<div class="anillo" title="${esc(c.nombre_centro)}: ${c.ocupacion_actual_unidades} de ${c.capacidad_unidades} unidades">
-    <svg viewBox="0 0 110 110" role="img" aria-label="${esc(c.nombre_centro)} al ${pct}%">
-      <circle cx="55" cy="55" r="${r}" fill="none" stroke="#E7F5DC" stroke-width="10"/>
-      <circle cx="55" cy="55" r="${r}" fill="none" stroke="${pct >= 90 ? "#A8432F" : "#728156"}" stroke-width="10" stroke-linecap="round"
-        stroke-dasharray="${(L * pct) / 100} ${L}" transform="rotate(-90 55 55)"/>
-      <text x="55" y="53" text-anchor="middle" font-family="Fraunces, serif" font-size="24" font-weight="600" fill="#2C3320">${Math.round(pct)}%</text>
-      <text x="55" y="71" text-anchor="middle" font-size="10" fill="#868D7C">${c.ocupacion_actual_unidades}/${c.capacidad_unidades} u</text>
-    </svg><div class="t">${esc(c.nombre_centro)}</div><div class="s">${pct >= 90 ? "Casi lleno" : "Ocupación"}</div></div>`;
-}
+const numero = (valor, unidad, texto, clase = "t2", enlace = "") => {
+  const tag = enlace ? "a" : "div";
+  return `<${tag} class="kpi ${clase}"${enlace ? ` href="${enlace}"` : ""}>
+    <span class="val">${valor}${unidad ? `<small>${unidad}</small>` : ""}</span><span class="pie">${texto}</span></${tag}>`;
+};
 
 export async function render(v, { usuario, rol }) {
-  const [p, cats] = await Promise.all([api.get("/api/panel"), api.get("/api/dispositivos")]);
-  const ahora = new Date();
-  const hero = `<section class="hero">
-    <div>
-      <span class="chip-rol">${icono("hoja")} ${esc(usuario.nombre_rol)}</span>
-      <h2>${saludo()}, ${esc(usuario.nombres)}</h2>
-      <p>${rol === "GEN" ? "Aquí puede seguir cada equipo que entregó, desde su registro hasta su nuevo destino."
-        : "Así va la trazabilidad de los aparatos eléctricos y electrónicos de la universidad."}</p>
-      <div class="hora">${ahora.toLocaleTimeString("es-EC", { hour: "2-digit", minute: "2-digit" })}
-        <span style="font-size:15px;color:var(--ink-3);font-family:var(--font)">${ahora.toLocaleDateString("es-EC", { weekday: "long", day: "numeric", month: "long" })}</span></div>
-    </div>${HERO}</section>`;
+  const p = await api.get("/api/panel");
+  const [destino, etiqueta] = ACCION[rol] || ACCION.ADM;
+  const iniciales = `${(usuario.nombres || "?")[0]}${(usuario.apellidos || "")[0] || ""}`.toUpperCase();
+  const gen = rol === "GEN";
 
-  if (rol === "GEN") {
+  const titular = `<section class="inicio-titular">
+      <div class="lado">
+        <div style="display:flex;gap:10px"><span class="burbuja-ic">${icono("hoja")}</span><span class="burbuja-ic oscura">${icono("reciclar")}</span></div>
+        <p>${gen ? "Aquí sigue cada equipo que entregó, desde su registro hasta su nuevo destino."
+          : "Somos el sistema de la universidad que sigue cada aparato eléctrico y electrónico hasta su nuevo destino."}</p>
+      </div>
+      <h1>Dale una <span class="resaltar">nueva vida</span> a cada equipo</h1>
+      <div class="lado der">
+        <a class="burbuja-ic borde" href="${destino}" aria-label="${esc(etiqueta)}">${icono("flecha")}</a>
+        <a class="btn suave" href="#/dispositivos">${gen ? "Mis equipos" : "Explorar equipos"} ${icono("flecha")}</a>
+      </div>
+    </section>
+    <section class="escaparate">
+      <div class="equipo-lado"><span class="avatar">${esc(iniciales)}</span><b>${esc(usuario.nombres)}</b><span>${esc(usuario.nombre_rol)}</span></div>
+      <div class="foto-recorte">
+        <img src="${FOTO}" alt="Computadores, monitor, impresora y teclado en desuso apilados" loading="eager">
+        <div class="etiquetas"><div><span>Reutilizar</span><span>Reparar</span></div><div><span>Reciclar</span><span>Trazar</span></div></div>
+      </div>
+    </section>
+    <div class="inicio-acciones"><a class="btn texto" href="#/dispositivos">Explorar más</a><a class="btn" href="${destino}">${esc(etiqueta)}</a></div>
+    <div class="cinta" aria-hidden="true"><div>${Array(16).fill("<span>Cada equipo cuenta</span>").join("")}</div></div>`;
+
+  if (gen) {
     const total = p.por_estado.reduce((a, f) => a + f.n, 0);
     const kg = p.por_estado.reduce((a, f) => a + Number(f.kg || 0), 0);
-    v.innerHTML = `${hero}
-      <div class="grid g-3">
-        <div class="kpi t1"><span class="et"><span class="ic">${icono("solicitud")}</span>Solicitudes</span><span class="val">${p.solicitudes}</span></div>
-        <div class="kpi t2"><span class="et"><span class="ic">${icono("dispositivo")}</span>Equipos entregados</span><span class="val">${total}</span></div>
-        <div class="kpi t3"><span class="et"><span class="ic">${icono("peso")}</span>Peso total</span><span class="val">${fmt.num(kg, 1)}<small>kg</small></span></div>
-      </div>
-      <div class="tarjeta"><div class="tarjeta-cab"><div><h3>Mis equipos por estado</h3><div class="sub">Cada barra es el número de equipos</div></div>
-        <a class="btn" href="#/solicitudes">${icono("mas")}Nueva solicitud</a></div>${barras(p.por_estado, total)}</div>`;
+    const cerrados = p.por_estado.find((f) => f.estado_actual === "Cerrado")?.n || 0;
+    v.innerHTML = `${titular}
+      <section class="numeros" style="grid-template-columns:1fr minmax(240px,1.2fr) 1fr" aria-label="Mis números">
+        <div class="col">${numero(p.solicitudes, "", "solicitudes de entrega registradas", "t1", "#/solicitudes")}
+          ${numero(total, "", "equipos entregados por usted", "t2", "#/dispositivos")}</div>
+        <div class="foto-centro"><img src="${FOTO}" alt=""><span class="globo">Gracias por entregar sus equipos</span></div>
+        <div class="col">${numero(fmt.num(kg, 1), "kg", "de residuos electrónicos que no fueron a la basura", "t3")}
+          ${numero(cerrados, "", "equipos ya tienen destino final confirmado", "t4")}</div>
+      </section>
+      ${declaracion(gen)}`;
     return;
   }
 
-  const porCat = {};
-  cats.forEach((d) => { porCat[d.nombre_categoria] = (porCat[d.nombre_categoria] || 0) + 1; });
-  v.innerHTML = `${hero}
-    <div class="grid g-4">
-      <div class="kpi t1"><span class="et"><span class="ic">${icono("dispositivo")}</span>Equipos en inventario</span>
-        <span class="val">${p.en_inventario}<small>de ${p.total_dispositivos}</small></span><span class="pie">Están hoy en un centro</span></div>
-      <div class="kpi t2"><span class="et"><span class="ic">${icono("reciclar")}</span>Kg recuperados</span>
-        <span class="val">${fmt.num(p.kg_recuperados, 1)}<small>kg</small></span><span class="pie">Reutilizados o valorizados de ${fmt.kg(p.kg_totales)}</span></div>
-      <div class="kpi t3"><span class="et"><span class="ic">${icono("centro")}</span>Capacidad usada</span>
-        <span class="val">${fmt.num(p.capacidad_usada_pct, 1)}<small>%</small></span><span class="pie">Suma de todos los centros</span></div>
-      <div class="kpi t4"><span class="et"><span class="ic">${icono("check")}</span>Trazabilidad cerrada</span>
-        <span class="val">${fmt.num(p.trazabilidad_pct, 1)}<small>%</small></span><span class="pie">Equipos con ciclo completo</span></div>
+  v.innerHTML = `${titular}
+    <section class="numeros" aria-label="Estadísticas">
+      <div class="col">${numero(`+${p.total_dispositivos}`, "", "equipos registrados en el sistema", "t1", "#/dispositivos")}
+        ${numero(p.en_inventario, "", "equipos están hoy en un centro", "t2", "#/centros")}</div>
+      <div class="col">${numero(fmt.num(p.kg_recuperados, 1), "kg", `reutilizados o valorizados de ${fmt.kg(p.kg_totales)}`, "t3")}
+        ${numero(`${fmt.num(p.trazabilidad_pct, 0)}`, "%", "de los equipos con ciclo de vida cerrado", "t4")}</div>
+      <div class="foto-centro"><img src="${FOTO}" alt=""><span class="globo">Trazabilidad de RAEE en la universidad</span></div>
+      <div class="col">${numero(p.solicitudes_pendientes, "", "solicitudes esperan ser recibidas", "t2", "#/solicitudes")}
+        ${numero(p.movimientos_abiertos, "", "movimientos entre centros abiertos", "t1", "#/movimientos")}</div>
+      <div class="col">${numero(p.transferencias_abiertas, "", "transferencias esperan evidencia", "t3", "#/transferencias")}
+        ${numero(`${fmt.num(p.capacidad_usada_pct, 0)}`, "%", `de la capacidad de los centros en uso · ${p.alertas_abiertas} alerta${p.alertas_abiertas === 1 ? "" : "s"}`, "t2 borde-anillos", "#/alertas")}</div>
+    </section>
+    ${declaracion(gen, rol)}
+    <section class="tarjeta">
+      <span class="pildora">Actividad reciente</span>
+      <div class="tarjeta-cab"><div><h3>Últimos cambios de estado</h3><div class="sub">Del historial de cada equipo (lo registra un trigger)</div></div>
+        <a class="btn texto" href="#/dispositivos">Ver todos ${icono("flechaDer")}</a></div>
+      ${tabla(p.ultimos_cambios, [
+        { t: "Equipo", v: (f) => `<a href="#/dispositivos/${esc(f.id_dispositivo)}"><b>${esc(f.id_dispositivo)}</b></a>` },
+        { t: "Nuevo estado", v: (f) => estado(f.estado_nuevo) },
+        { t: "Responsable", v: (f) => esc(f.responsable) }, { t: "Fecha", v: (f) => fmt.fechaHora(f.fecha_cambio), clase: "nowrap" }])}
+    </section>`;
+}
+
+function declaracion(gen, rol) {
+  const red = ["COO", "ADM", "OPE", "TEC"].includes(rol);
+  return `<section class="declaracion">
+    <p>EcoRAEE registra, evalúa y asigna un destino a los equipos en desuso de la universidad, con evidencia en cada paso del camino.</p>
+    <div>
+      <h2>Protegemos el ambiente para las próximas generaciones, un equipo a la vez.</h2>
+      <div class="acciones">
+        ${gen ? `<a class="btn suave" href="#/solicitudes">Mis solicitudes</a><a class="btn texto" href="#/dispositivos">Ver mis equipos ${icono("flechaDer")}</a>`
+          : `${red ? `<a class="btn suave" href="#/red">Red y flujo máximo</a>` : ""}<a class="btn texto" href="#/dispositivos">Ver equipos ${icono("flechaDer")}</a>`}
+      </div>
     </div>
-    <div class="grid g-panel">
-      <div class="tarjeta"><div class="tarjeta-cab"><div><h3>Equipos por estado del ciclo de vida</h3><div class="sub">Número de equipos y porcentaje del total</div></div></div>
-        ${barras(p.por_estado, p.total_dispositivos)}</div>
-      <div class="tarjeta"><div class="tarjeta-cab"><div><h3>Pendientes</h3><div class="sub">Trabajo abierto ahora</div></div></div>
-        <div class="grid" style="gap:10px">
-          <a class="kpi t1" href="#/solicitudes" style="text-decoration:none;color:inherit"><span class="et">Solicitudes por recibir</span><span class="val">${p.solicitudes_pendientes}</span></a>
-          <a class="kpi t2" href="#/movimientos" style="text-decoration:none;color:inherit"><span class="et">Movimientos abiertos</span><span class="val">${p.movimientos_abiertos}</span></a>
-          <a class="kpi t3" href="#/transferencias" style="text-decoration:none;color:inherit"><span class="et">Transferencias sin evidencia</span><span class="val">${p.transferencias_abiertas}</span></a>
-          <a class="kpi t4" href="#/alertas" style="text-decoration:none;color:inherit"><span class="et">Alertas de capacidad</span><span class="val">${p.alertas_abiertas}</span></a>
-        </div></div>
-    </div>
-    <div class="tarjeta"><div class="tarjeta-cab"><div><h3>Ocupación de los centros</h3><div class="sub">Unidades guardadas frente a su capacidad (alerta desde 90 %)</div></div>
-      <a class="btn suave chico" href="#/centros">Ver centros</a></div><div class="anillos">${p.centros.map(anillo).join("")}</div></div>
-    <div class="tarjeta"><div class="tarjeta-cab"><div><h3>Equipos por categoría</h3><div class="sub">Toque una categoría para ver sus equipos</div></div>
-      <a class="btn suave chico" href="#/dispositivos">Ver todos</a></div>
-      <div class="categorias">${Object.entries(porCat).sort((a, b) => b[1] - a[1]).map(([cat, n], i) => {
-        const id = cats.find((d) => d.nombre_categoria === cat)?.id_categoria;
-        return `<a class="cat" href="#/dispositivos?categoria=${esc(id)}">${i === 0 ? '<span class="tag">Más recibidos</span>' : ""}${iconoCategoria(cat)}<b>${esc(cat)}</b><span>${n} equipos</span></a>`;
-      }).join("")}</div></div>
-    <div class="grid g-2">
-      <div class="tarjeta"><div class="tarjeta-cab"><div><h3>Cuellos de botella (escenario base)</h3><div class="sub">Aristas del corte mínimo de la red: limitan el flujo hacia los destinos</div></div>
-        <a class="btn suave chico" href="#/red">Ver red</a></div>
-        ${tabla(p.cuellos_botella, [
-          { t: "Desde", v: (f) => esc(f.nombre_origen) }, { t: "Hacia", v: (f) => esc(f.nombre_destino) },
-          { t: "Capacidad", v: (f) => fmt.kg(f.capacidad_kg), clase: "nowrap" }, { t: "Flujo", v: (f) => fmt.kg(f.flujo_kg), clase: "nowrap" }],
-          { vacioTexto: "Ejecute el flujo máximo para ver los cuellos de botella." })}</div>
-      <div class="tarjeta"><div class="tarjeta-cab"><div><h3>Últimos cambios de estado</h3><div class="sub">Del historial (lo llena un trigger)</div></div></div>
-        ${tabla(p.ultimos_cambios, [
-          { t: "Equipo", v: (f) => `<a href="#/dispositivos/${esc(f.id_dispositivo)}">${esc(f.id_dispositivo)}</a>` },
-          { t: "Cambio", v: (f) => `${estado(f.estado_nuevo)}` },
-          { t: "Responsable", v: (f) => esc(f.responsable) }, { t: "Fecha", v: (f) => fmt.fechaHora(f.fecha_cambio), clase: "nowrap" }])}</div>
-    </div>`;
+  </section>`;
 }
