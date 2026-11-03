@@ -1,0 +1,30 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PasarRolDeLaAPISoloAEC2",
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "arn:aws:iam::ACCOUNT_ID:role/ecoraee-ec2-api-role",
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": "ec2.amazonaws.com"
+        }
+      }
+    },
+    {
+      "Sid": "PasarRolDeMonitoreoSoloARDS",
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "arn:aws:iam::ACCOUNT_ID:role/ecoraee-rds-monitoring-role",
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": [
+            "rds.amazonaws.com",
+            "monitoring.rds.amazonaws.com"
+          ]
+        }
+      }
+    }
+  ]
+}

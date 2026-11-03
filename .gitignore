@@ -1,0 +1,21 @@
+# Secretos y entorno local
+backend/.env
+.env
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Evidencias subidas en local (no se versionan)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.bak

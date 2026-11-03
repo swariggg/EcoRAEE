@@ -1,0 +1,50 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LeerYSubirEvidencias",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::ecoraee-evidencias/evidencias/*"
+    },
+    {
+      "Sid": "ListarSoloLaCarpetaEvidencias",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::ecoraee-evidencias",
+      "Condition": {
+        "StringLike": {
+          "s3:prefix": [
+            "evidencias/*"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "UsarLaLlaveKMSSoloAtravesDeS3",
+      "Effect": "Allow",
+      "Action": [
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
+      ],
+      "Resource": "arn:aws:kms:us-east-1:ACCOUNT_ID:key/KMS_KEY_ID",
+      "Condition": {
+        "StringEquals": {
+          "kms:ViaService": "s3.us-east-1.amazonaws.com"
+        }
+      }
+    },
+    {
+      "Sid": "NuncaBorrarEvidencias",
+      "Effect": "Deny",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion"
+      ],
+      "Resource": "arn:aws:s3:::ecoraee-evidencias/*"
+    }
+  ]
+}
