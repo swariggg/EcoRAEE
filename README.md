@@ -67,7 +67,7 @@ copy .env.example .env
 **3. Iniciar el servidor**
 
 ```bash
-python -m uvicorn app.main:app --reload
+fastapi dev
 ```
 
 **4. Abrir el sistema**
